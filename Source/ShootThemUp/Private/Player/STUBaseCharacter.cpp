@@ -10,6 +10,7 @@
 #include "GameFramework/Controller.h"
 #include "Weapons/STUBaseWeapon.h"
 #include "Components/STUWeaponComponent.h"
+#include "Components/CapsuleComponent.h"
 
 DEFINE_LOG_CATEGORY_STATIC(BaseCharacterLog, All, All);
 
@@ -89,6 +90,7 @@ void ASTUBaseCharacter::OnDeath()
     {
         Controller->ChangeState(NAME_Spectating);
     }
+    GetCapsuleComponent()->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
 }
 
 void ASTUBaseCharacter::OnGroundLanded(const FHitResult &Hit)

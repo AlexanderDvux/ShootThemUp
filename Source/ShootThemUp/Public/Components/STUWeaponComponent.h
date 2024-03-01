@@ -22,7 +22,7 @@ protected:
     TSubclassOf<ASTUBaseWeapon> WeaponClass;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Weapon")
-    FName WeaponAttachPointName = "WeapontPoint";
+    FName WeaponAttachPointName = "WeaponPoint";
 
 	UPROPERTY()
     ASTUBaseWeapon *CurrentWeapon = nullptr;
