@@ -15,10 +15,14 @@ ASTUBaseWeapon::ASTUBaseWeapon()
     SetRootComponent(WeaponMesh);
 }
 
-void ASTUBaseWeapon::Fire()
+void ASTUBaseWeapon::StartFire()
 {
-    UE_LOG(LogBaseWeapon, Display, TEXT("Fire"));
-    MakeShot();
+   
+}
+
+void ASTUBaseWeapon::StopFire()
+{
+    
 }
 
 void ASTUBaseWeapon::BeginPlay()
@@ -30,37 +34,7 @@ void ASTUBaseWeapon::BeginPlay()
 
 void ASTUBaseWeapon::MakeShot()
 {
-    if (!GetWorld())
-    {
-        return;
-    }
-
-    FVector TraceStart, TraceEnd;
-    if (!GetTraceData(TraceStart, TraceEnd))
-    {
-        return;
-    }
-
-    FHitResult HitResult;
-    MakeHit(HitResult, TraceStart, TraceEnd);
-
-    if (HitResult.bBlockingHit)
-    {
-        MakeDamage(HitResult);
-        DrawDebugLine(GetWorld(), GetMuzzleWorldLocation(), HitResult.ImpactPoint, FColor::Red, false, 3.0f, 0,
-                      3.0f);
-        DrawDebugSphere(GetWorld(), HitResult.ImpactPoint, 10.0f, 24, FColor::Red, false, 3.0f);
-        UE_LOG(LogBaseWeapon, Display, TEXT("Bone %s"), *HitResult.BoneName.ToString());
-       
-    }
-    else
-    {   
-        DrawDebugLine(GetWorld(), GetMuzzleWorldLocation(), TraceEnd, FColor::Red, false, 3.0f, 0,
-                      3.0f);
-        
-    }
-
-
+  
 }
 
 APlayerController *ASTUBaseWeapon::GetPlayerController() const
@@ -115,12 +89,3 @@ void ASTUBaseWeapon::MakeHit(FHitResult & HitResult, const FVector &TraceStart, 
                                          CollisionParams);
 }
 
-void ASTUBaseWeapon::MakeDamage(const FHitResult &HitResult)
-{
-    const auto DamagedActor =HitResult.GetActor();
-    if (!DamagedActor)
-    {
-        return;
-    }
-    DamagedActor->TakeDamage(DamageAmount, FDamageEvent(), GetPlayerController(), this);
-}

@@ -1,35 +1,47 @@
 #pragma once
 
-#include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "CoreMinimal.h"
 #include "STUWeaponComponent.generated.h"
 
 class ASTUBaseWeapon;
 
-UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class SHOOTTHEMUP_API USTUWeaponComponent : public UActorComponent
 {
-	GENERATED_BODY()
+    GENERATED_BODY()
 
-public:	
-	USTUWeaponComponent();
+public:
+    USTUWeaponComponent();
 
-	void Fire();
+    void StartFire();
+    void StopFire();
+    void NextWeapon();
 
 protected:
+    UPROPERTY(EditDefaultsOnly, Category = "Weapon")
+    TArray<TSubclassOf<ASTUBaseWeapon>> WeaponClasses;
 
     UPROPERTY(EditDefaultsOnly, Category = "Weapon")
-    TSubclassOf<ASTUBaseWeapon> WeaponClass;
+    FName WeaponEquipSocketName = "WeaponPoint";
 
-	UPROPERTY(EditDefaultsOnly, Category = "Weapon")
-    FName WeaponAttachPointName = "WeaponPoint";
+    UPROPERTY(EditDefaultsOnly, Category = "Weapon")
+    FName WeaponArmorySocketName = "ArmoryPoint";
 
-	UPROPERTY()
+    virtual void BeginPlay() override;
+    virtual void EndPlay(EEndPlayReason::Type EndPlayReason) override;
+
+private:
+    UPROPERTY()
     ASTUBaseWeapon *CurrentWeapon = nullptr;
 
+    UPROPERTY()
+    TArray<ASTUBaseWeapon*> Weapons;
 
-	virtual void BeginPlay() override;
-	void SpawnWeapon();
-		
+    int32 CurrentWeaponIndex = 0;
+
+    void SpawnWeapons();
+    void AttachWeaponToSocket(ASTUBaseWeapon* Weapon,USceneComponent* SceneComponent,const FName& SocketName);
+    void EquipWeapon(int32 WeaponIndex);
 
 };
