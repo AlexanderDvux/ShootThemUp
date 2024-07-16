@@ -91,6 +91,7 @@ void ASTUBaseCharacter::OnDeath()
         Controller->ChangeState(NAME_Spectating);
     }
     GetCapsuleComponent()->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
+    WeaponComponent->StopFire();
 }
 
 void ASTUBaseCharacter::OnGroundLanded(const FHitResult &Hit)

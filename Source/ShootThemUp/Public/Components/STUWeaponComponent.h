@@ -25,6 +25,9 @@ protected:
     UPROPERTY(EditDefaultsOnly, Category = "Weapon")
     FName WeaponEquipSocketName = "WeaponPoint";
 
+    UPROPERTY(EditDefaultsOnly, Category = "Animation")
+    UAnimMontage* EquipAnimMontage;
+
     UPROPERTY(EditDefaultsOnly, Category = "Weapon")
     FName WeaponArmorySocketName = "ArmoryPoint";
 
@@ -40,8 +43,16 @@ private:
 
     int32 CurrentWeaponIndex = 0;
 
+    bool EquipAnimInProgress = false;
+
     void SpawnWeapons();
     void AttachWeaponToSocket(ASTUBaseWeapon* Weapon,USceneComponent* SceneComponent,const FName& SocketName);
     void EquipWeapon(int32 WeaponIndex);
+    void PlayAnimMontage(UAnimMontage *Animation);
+    void InitAnimations();
+    void OnEquipFinished(USkeletalMeshComponent *MeshComponent);
+
+    bool CanEquip() const;
+    bool CanFire() const;
 
 };
