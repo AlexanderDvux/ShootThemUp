@@ -6,37 +6,60 @@
 
 class USkeletalMeshComponent;
 
+USTRUCT(BlueprintType)
+struct FAmmoData
+{
+    GENERATED_USTRUCT_BODY()
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
+    int32 Bullets;
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon", meta = (EditCondition = "!Infinite"))
+    int32 Clips;
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
+    bool Infinite;
+};
+
 UCLASS()
 class SHOOTTHEMUP_API ASTUBaseWeapon : public AActor
 {
-	GENERATED_BODY()
-	
-public:	
-	ASTUBaseWeapon();
+    GENERATED_BODY()
 
-	virtual void StartFire();
-	virtual void StopFire();
+public:
+    ASTUBaseWeapon();
+
+    virtual void StartFire();
+    virtual void StopFire();
 
 protected:
     UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
     USkeletalMeshComponent *WeaponMesh;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
     FName MuzzleSocketName = "MuzzleSocket";
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
     float TraceMaxDistance = 1500.0f;
 
-   
-    
-   
-	virtual void BeginPlay() override;
+    UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
+    FAmmoData DefaultAmmo = {30, 3, false};
+
+    virtual void BeginPlay() override;
     virtual void MakeShot();
     APlayerController *GetPlayerController() const;
-    bool GetPlayerViewPoint(FVector &ViewLocation,FRotator &ViewRotation) const;
+    bool GetPlayerViewPoint(FVector &ViewLocation, FRotator &ViewRotation) const;
     FVector GetMuzzleWorldLocation() const;
-    virtual bool GetTraceData(FVector &InTraceStart,FVector &InTraceEnd) const;
-    void MakeHit(FHitResult &HitResult,const FVector &TraceStart,const FVector &TraceEnd);
+    virtual bool GetTraceData(FVector &InTraceStart, FVector &InTraceEnd) const;
+    void MakeHit(FHitResult &HitResult, const FVector &TraceStart, const FVector &TraceEnd);
 
-  
+    void DecreaseAmmo();
+    bool IsAmmoEmpty() const;
+    void ChangeClip();
+    bool IsClipEmpty() const;
+    void LogAmmo();
+
+private:
+    FAmmoData CurrentAmmo;
+
 };

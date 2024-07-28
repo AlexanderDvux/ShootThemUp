@@ -7,14 +7,17 @@
 
 void ASTURifleWeapon::MakeShot()
 {
-    if (!GetWorld())
+    UE_LOG(LogTemp, Display, TEXT("make shot"));
+    if (!GetWorld()||IsAmmoEmpty())
     {
+        StopFire();
         return;
     }
 
     FVector TraceStart, TraceEnd;
     if (!GetTraceData(TraceStart, TraceEnd))
     {
+        StopFire();
         return;
     }
 
@@ -33,6 +36,7 @@ void ASTURifleWeapon::MakeShot()
         DrawDebugLine(GetWorld(), GetMuzzleWorldLocation(), TraceEnd, FColor::Red, false, 3.0f, 0, 3.0f);
     }
 
+    DecreaseAmmo();
 
 }
 

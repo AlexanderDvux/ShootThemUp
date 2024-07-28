@@ -34,7 +34,7 @@ void USTUWeaponComponent::EndPlay(EEndPlayReason::Type EndPlayReason)
 
 void USTUWeaponComponent::StartFire()
 {
-    if (!CurrentWeapon)
+    if (!CanFire())
     {
         return;
     }
@@ -52,6 +52,10 @@ void USTUWeaponComponent::StopFire()
 
 void USTUWeaponComponent::NextWeapon()
 {
+    if (!CanEquip())
+    {
+        return;
+    }
     CurrentWeaponIndex = (CurrentWeaponIndex + 1) % Weapons.Num();
     EquipWeapon(CurrentWeaponIndex);
 }
@@ -152,5 +156,6 @@ bool USTUWeaponComponent::CanEquip() const
 
 bool USTUWeaponComponent::CanFire() const
 {
-    return false;
+
+    return CurrentWeapon && !EquipAnimInProgress;
 }
